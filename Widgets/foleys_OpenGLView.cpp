@@ -38,6 +38,13 @@ OpenGLView::~OpenGLView()
 void OpenGLView::paint (juce::Graphics& g)
 {
     juce::ignoreUnused (g);
+    //To fix unchanging drawFittedText
+    juce::Component::SafePointer<juce::Component> safe(this);
+    juce::Timer::callAfterDelay(10, [safe]()mutable
+    {
+        if (safe)
+            safe->repaint();
+    });
 }
 
 void OpenGLView::render()

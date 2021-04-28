@@ -218,8 +218,8 @@ static inline void drawTexture (juce::OpenGLContext& context,
 
         GLuint vertexBuffer = 0;
         context.extensions.glGenBuffers (1, &vertexBuffer);
-        context.extensions.glBindBuffer (GL_ARRAY_BUFFER, vertexBuffer);
-        context.extensions.glBufferData (GL_ARRAY_BUFFER, sizeof (vertices), vertices, GL_STATIC_DRAW);
+        context.extensions.glBindBuffer (juce::GL_ARRAY_BUFFER, vertexBuffer);
+        context.extensions.glBufferData (juce::GL_ARRAY_BUFFER, sizeof (vertices), vertices, juce::GL_STATIC_DRAW);
         JUCE_CHECK_OPENGL_ERROR
 
         auto index = (GLuint) program.params.positionAttribute.attributeID;
@@ -227,11 +227,11 @@ static inline void drawTexture (juce::OpenGLContext& context,
         context.extensions.glEnableVertexAttribArray (index);
         JUCE_CHECK_OPENGL_ERROR
 
-        if (context.extensions.glCheckFramebufferStatus (GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
+        if (context.extensions.glCheckFramebufferStatus (juce::GL_FRAMEBUFFER) == juce::GL_FRAMEBUFFER_COMPLETE)
         {
             glDrawArrays (GL_TRIANGLE_STRIP, 0, 4);
 
-            context.extensions.glBindBuffer (GL_ARRAY_BUFFER, 0);
+            context.extensions.glBindBuffer (juce::GL_ARRAY_BUFFER, 0);
             context.extensions.glUseProgram (0);
             context.extensions.glDisableVertexAttribArray (index);
             context.extensions.glDeleteBuffers (1, &vertexBuffer);
