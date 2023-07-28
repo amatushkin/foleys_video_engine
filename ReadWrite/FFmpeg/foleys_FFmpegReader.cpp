@@ -353,7 +353,6 @@ private:
                           enum AVMediaType type,
                           bool refCounted)
     {
-        AVCodec *decoder = nullptr;
         AVDictionary *opts = nullptr;
 
         int id = av_find_best_stream (formatContext, type, -1, -1, nullptr, 0);
@@ -361,7 +360,7 @@ private:
         if (juce::isPositiveAndBelow(id, static_cast<int> (formatContext->nb_streams))) {
             AVStream* stream = formatContext->streams [id];
             // find decoder for the stream
-            decoder = avcodec_find_decoder(stream->codecpar->codec_id);
+            auto decoder = avcodec_find_decoder(stream->codecpar->codec_id);
             if (!decoder) {
                 FOLEYS_LOG ("Failed to find " << juce::String (av_get_media_type_string(type)) << " codec");
                 return -1;

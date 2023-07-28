@@ -35,7 +35,6 @@
 #pragma comment (lib, "avcodec.lib")
 #pragma comment (lib, "swscale.lib")
 #pragma comment (lib, "swresample.lib")
-#pragma comment (lib, "avresample.lib")
 #endif
 
 #ifdef __cplusplus
@@ -48,6 +47,7 @@ extern "C" {
 #include <libavformat/avformat.h>
 #include <libswscale/swscale.h>
 #include <libswresample/swresample.h>
+#include <libavcodec/avcodec.h>
 
 #ifdef __cplusplus
 }
