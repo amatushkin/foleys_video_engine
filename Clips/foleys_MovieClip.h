@@ -97,6 +97,7 @@ public:
 
     bool waitForFrameReady (double pts, int timeout=1000) override;
 
+    bool isVideoPlaying() const;
 private:
 
     void handleAsyncUpdate() override;
@@ -111,10 +112,12 @@ private:
 
         void setSuspended (bool s);
         bool isSuspended() const;
+        bool isVideoPlaying() const;
     private:
         MovieClip& owner;
         std::atomic<bool> suspended = true;
         bool inDecodeBlock = false;
+        std::atomic<bool> videoPlaying = false;
     };
 
     BackgroundReaderJob backgroundJob {*this};

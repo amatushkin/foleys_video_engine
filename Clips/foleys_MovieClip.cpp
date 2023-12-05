@@ -1,3 +1,4 @@
+#include "foleys_MovieClip.h"
 /*
  ==============================================================================
 
@@ -188,6 +189,11 @@ bool MovieClip::waitForFrameReady (double pts, int timeout)
     return videoFifo.isFrameAvailable (pts);
 }
 
+bool MovieClip::isVideoPlaying() const
+{
+    return backgroundJob.isVideoPlaying();
+}
+
 void MovieClip::getNextAudioBlock (const juce::AudioSourceChannelInfo& info)
 {
     const auto gain = float (juce::Decibels::decibelsToGain (getAudioParameters().at(IDs::gain)->getRealValue()));
@@ -319,9 +325,12 @@ int MovieClip::BackgroundReaderJob::useTimeSlice()
     {
         juce::ScopedValueSetter<bool> guard (inDecodeBlock, true);
         owner.movieReader->readNewData (owner.videoFifo, owner.audioFifo);
+
+        videoPlaying = true;
         return 3;
     }
 
+    videoPlaying = false;
     return 30;
 }
 
@@ -336,6 +345,11 @@ void MovieClip::BackgroundReaderJob::setSuspended (bool s)
 bool MovieClip::BackgroundReaderJob::isSuspended() const
 {
     return suspended;
+}
+
+bool MovieClip::BackgroundReaderJob::isVideoPlaying() const
+{
+    return videoPlaying;
 }
 
 juce::TimeSliceClient* MovieClip::getBackgroundJob()
