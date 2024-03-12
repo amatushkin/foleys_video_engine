@@ -26,7 +26,7 @@
   description:       Provides classes to read audio streams from video files or to
                      mux audio into an existing video
   dependencies:      juce_audio_basics juce_audio_formats juce_gui_basics
-                     juce_graphics juce_core juce_audio_utils
+                     juce_graphics juce_core juce_audio_utils juce_opengl
   minimumCppStandard: 17
 
   website:       https://foleysfinest.com/

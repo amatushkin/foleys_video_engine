@@ -22,6 +22,10 @@
 
 #if FOLEYS_USE_OPENGL
 
+#if (JUCE_VERSION >= 0x070000)
+using namespace juce::gl;
+#endif
+
 namespace foleys
 {
 
@@ -218,8 +222,13 @@ static inline void drawTexture (juce::OpenGLContext& context,
 
         GLuint vertexBuffer = 0;
         context.extensions.glGenBuffers (1, &vertexBuffer);
+        #if (JUCE_VERSION >= 0x070000)
+        context.extensions.glBindBuffer (GL_ARRAY_BUFFER, vertexBuffer);
+        context.extensions.glBufferData (GL_ARRAY_BUFFER, sizeof (vertices), vertices,GL_STATIC_DRAW);
+        #else
         context.extensions.glBindBuffer (juce::GL_ARRAY_BUFFER, vertexBuffer);
         context.extensions.glBufferData (juce::GL_ARRAY_BUFFER, sizeof (vertices), vertices, juce::GL_STATIC_DRAW);
+        #endif
         JUCE_CHECK_OPENGL_ERROR
 
         auto index = (GLuint) program.params.positionAttribute.attributeID;
@@ -227,11 +236,19 @@ static inline void drawTexture (juce::OpenGLContext& context,
         context.extensions.glEnableVertexAttribArray (index);
         JUCE_CHECK_OPENGL_ERROR
 
+        #if (JUCE_VERSION >= 0x070000)
+        if (context.extensions.glCheckFramebufferStatus (GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE)
+        #else
         if (context.extensions.glCheckFramebufferStatus (juce::GL_FRAMEBUFFER) == juce::GL_FRAMEBUFFER_COMPLETE)
+        #endif
         {
             glDrawArrays (GL_TRIANGLE_STRIP, 0, 4);
 
+            #if (JUCE_VERSION >= 0x070000)
+            context.extensions.glBindBuffer (GL_ARRAY_BUFFER, 0);
+            #else
             context.extensions.glBindBuffer (juce::GL_ARRAY_BUFFER, 0);
+            #endif
             context.extensions.glUseProgram (0);
             context.extensions.glDisableVertexAttribArray (index);
             context.extensions.glDeleteBuffers (1, &vertexBuffer);
